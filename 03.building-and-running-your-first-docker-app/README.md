@@ -112,3 +112,66 @@ Image are immutable, create new image with new tag
 
 ![Image Container](imagecontainer.png)
 
+Pull image using `docker pull <image_name>`
+Running a Container: `docker run`
+
+- `p`: port, mapping port from outside to inside container
+  `<externalPort>:<internalPort>`
+
+Using Docker Run
+`docker run -d -p 8000:80 nginx:alpine`
+
+- `d`: detact terminal, running in background
+- `p`: mappping port
+
+List docker container statuses: `docker ps` or `docker ps -a`
+
+Remove a container: `docker rm <ID>`
+
+View Container Logs
+
+`docker logs <containerID>`
+
+Using Container Volumes
+
+As you work with containers, there's going to be times where you write
+files or you have database files or others that need to be saved outside
+of the container.
+That way, if the container is removed, you don't lose your files.
+That's what volumes can help us with.
+
+Storing Data Outside of a Container
+
+Volume Mount
+
+- Volume: `/var/www/logs`
+- Create `/mnt` folder on Docker host
+
+![Volumn mount](volumemount.png)
+
+Create a Container Volume
+`docker run -p <posrts> -v /var/www/logs <image>`
+
+Defining a Host Location
+`docker run -p <ports> -v $(pwd):/var/www/logs <image>`
+or
+`docker run -p <ports> -v ${PWD}:/var/www/logs <image>` (on Windows)
+
+Volume Scenarios
+
+- Production Scenarios (logs, database files and more)
+- Development Scenarios (develop using container)
+
+Development:
+
+- ngnix:alpine
+- static folder contains `index.html` on Docker host
+- Mount that volume to `home` (`/usr/share/nginx/html`) directory inside nginx container
+- Start container
+- `$(pwd)`: Current directory contain README.md file
+
+`docker run -d -p 8000:80 -v $(pwd)/nginx:/usr/share/nginx/html nginx:alpine`
+
+Production:
+
+- Mount logs folder
