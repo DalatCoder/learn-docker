@@ -109,3 +109,6 @@ Image are immutable, create new image with new tag
 `docker push <username>/<image_name>:<tag>`
 
 ## 3. Run an containized application
+
+![Image Container](imagecontainer.png)
+
