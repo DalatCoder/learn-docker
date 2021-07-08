@@ -143,4 +143,62 @@ Các bước thực hiện
 - `dotnet watch run`
 - `Ctrl P Q` to detach `tty`
 
-## 4. Removing Containers and Volumes
+## 4. Building Custom Images with Dockerfile
+
+### 4.1. Dockerfile and Images
+
+Docker is a text file with instructions in it.
+
+![Dockerfile and Images](dockerfileandimage.png)
+
+Dockerfile overview
+
+- Text file used to build Docker images
+- Contains build instructions
+- Instructions create intermediate that can be cached to speed up future builds
+- Used with `docker build` command
+
+Key Dockerfile instructions
+
+- `FROM`: specified based image, custom image build on top of this image with
+  custom layered file system.
+- `LABEL`: who maintain, author...
+- `RUN`: run a command inside container
+- `COPY`: copy source code into container for production
+- `ENTRYPOINT`: entrypoint for container
+- `WORKDIR`: set context for where the container actually run (e.g. Entrypoint)
+- `EXPOSE`: expose port from container
+- `ENV`: define environment variable
+- `VOLUME`: define volume
+
+### 4.2. Creating a custom Node.JS Dockerfile
+
+```Dockerfile
+  FROM        node:latest
+
+  LABEL       author="Trong Hieu"
+
+  ENV         NODE_ENV=production
+  ENV         PORT=3000
+
+  COPY        . /var/www
+  WORKDIR     /var/www
+
+  VOLUME [ "/var/www"]
+
+  RUN         npm install
+
+  EXPOSE      $PORT
+
+  ENTRYPOINT  [ "npm", "start" ]
+```
+
+### 4.3. Building a Custom Image
+
+`docker build -f <dockerfile_name> -t <dockerhub_id>/<image_name>:<image_tag> .`
+
+Intermediated container will be cache.
+
+Run with `docker run -d -p 8000:3000 <image_name>`
+
+### 4.3. Creating a custom ASP.NET Core Dockerfile
