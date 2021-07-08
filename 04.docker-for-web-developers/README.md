@@ -304,3 +304,34 @@ Or
 - Running: `docker exec legacynodelinking node dbseeder.js`
 
 ### 5.4. Linking ASP.NET Core and PostgreSQL Containers
+
+```Dockerfile
+  FROM mcr.microsoft.com/dotnet/core/sdk
+
+  LABEL author="Dan Wahlin"
+
+  ENV ASPNETCORE_URLS=http://+:5000
+
+  WORKDIR /var/www/aspnetcoreapp
+
+  COPY . .
+
+  EXPOSE 5000
+
+  ENTRYPOINT ["/bin/bash", "-c", "dotnet restore && dotnet run"]
+```
+
+Build image: `docker build -f aspnetcore.dockerfile -t legacyaspcore .`
+
+Pull PostgreSQL images: `docker pull postgres`
+
+Run PostgresQL container: `docker run -d --name my-postgres -e POSTGRES_PASSWORD=password postgres`
+
+Link `legacyaspcore` container with `my-postgres` container
+`docker run -d -p 8000:5000 --link my-postgres:postgres legacyaspcore`
+
+`postgres`: alias name used inside `legacyaspcore` container. See `appsetings.json`.
+
+Go to `localhost:8000/Home/Index`
+
+> Always setup try catch when connect to Database
