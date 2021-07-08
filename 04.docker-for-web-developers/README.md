@@ -259,3 +259,46 @@ Link to running container by name
   - `postgres`: Linked container alias (Using inside `dalatcoder/aspnetcore` for `database connection string`)
 
 ### 5.3. Linking Node.js and MongoDB Containers
+
+`legacylinking.dockerfile`
+
+```Dockerfile
+  FROM node:latest
+
+  LABEL author="Trong Hieu"
+
+  ENV NODE_ENV=development
+  ENV PORT=3000
+
+  COPY . /var/www
+  WORKDIR /var/www
+
+  RUN npm install
+
+  EXPOSE $PORT
+
+  ENTRYPOINT [ "npm", "start" ]
+```
+
+Build image: `docker build -t legacynodelinking -f legacylinking.dockerfile .`
+
+Start MongoDB with custom name (`my-mongodb`): `docker run -d --name my-mongodb mongo`
+
+Start Node and Link to MongoDB container
+
+`docker run -d -p 3000:3000 --link my-mongodb:mongodb legacynodelinking`
+
+- `d`: deattach terminal
+- `p`: mapping port
+- `--link`: to link `legacynodelinking` container to `my-mongodb` container
+- `mongodb`: alias name, use for connection string inside `legacynodelinking` container.
+  See at (`LinkingNodeToMongoDB/config/config.development.json`)
+
+Seed data to MongoDB
+
+- Go inside `legacynodelinking` container: `docker exec -it legacynodelinking sh`
+- Running `node dbseeder.js`
+
+Or
+
+- Running: `docker exec legacynodelinking node dbseeder.js`
