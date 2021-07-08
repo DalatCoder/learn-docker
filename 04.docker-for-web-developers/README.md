@@ -142,3 +142,5 @@ Các bước thực hiện
 - `dotnet run`
 - `dotnet watch run`
 - `Ctrl P Q` to detach `tty`
+
+## 4. Removing Containers and Volumes
