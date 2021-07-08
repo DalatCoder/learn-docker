@@ -335,3 +335,30 @@ Link `legacyaspcore` container with `my-postgres` container
 Go to `localhost:8000/Home/Index`
 
 > Always setup try catch when connect to Database
+
+### 5.5. Getting Started with Container Networks
+
+Steps to Create a Container Network
+
+1. Create a Custom Bridge Network
+   `docker network create --driver bridge isolated_network`
+
+   - `bridge`: network driver
+   - `isolated_network`: name of custom network
+
+2. Run Containers in the Network
+   `docker run -d --net=isolated_network --name mongodb mongo`
+   - `mongodb`: name use in connection string ("Link" to this container by name | Communication)
+
+### 5.6. Linking NodeJS Application with MongoDB using Network
+
+- Create custom network: `docker network create --driver bridge isolated_network`
+- Run `mongo` inside custom network: `docker run -d --net=isolated_network --name mongodb mongo`
+- Run `legacynodelinking` inside custom network: `docker run -d --net=isolated_network --name nodeapp -p 8000:3000 legacynodelinking`
+- Run `DBSeeder`: `docker exec nodeapp node dbSeeder.js`
+
+#### Operation on Networks
+
+- List: `docker network ls`
+- Inspect: `docker network inspect <network_name>`
+- Help: `docker network --help`
