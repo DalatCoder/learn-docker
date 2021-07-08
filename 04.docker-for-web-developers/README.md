@@ -440,6 +440,7 @@ networks:
 - `docker-compose stop`
 - `docker-compose start`
 - `docker-compose rm`
+- `docker exec <container_name> <command>`
 
 ### 6.4. Docker Compose in action
 
@@ -499,3 +500,122 @@ networks:
   aspnetcoreapp-network:
     driver: bridge
 ```
+
+### 6.5. Setting Up Development Environment Services
+
+![Development Environment](developmentenv.png)
+
+Source code at: [Github](https://github.com/DanWahlin/CodeWithDanDockerServices)
+
+```yml
+# 1. Update config values (localhost --> mongo and localhost --> redis) in config/config.development.json if necessary.
+# 2. Set APP_ENV environment variable by running the following command in your commnand window (see the notes below if on Windows).
+
+#    export APP_ENV=development or export APP_ENV=production
+#    export DOCKER_ACCT=codewithdan
+
+#    NOTE: If you're on Windows use one of the following commands to create the environment variables.
+#    Use 'codewithdan' for the account if you want to run in Kubernetes (see the readme). Otherwise, you can substitute your own
+#    Docker account for the value if you'd like.
+
+#    For the standard Windows DOS command shell use `set` instead of `export` for environment variables.
+#    For Windows Powershell use `$env:APP_ENV = "value"`.
+
+#    $env:APP_ENV="development" or $env:APP_ENV="production"
+#    $env:DOCKER_ACCT="codewithdan"
+
+# 3. Remove "node" service `volume` (below) if doing a production build
+# 4. Run docker-compose build
+# 5. Run docker-compose up
+# 6. Live long and prosper
+
+version: '3.7'
+
+services:
+  nginx:
+    container_name: nginx
+    image: ${DOCKER_ACCT}/nginx
+    build:
+      context: .
+      dockerfile: .docker/nginx.${APP_ENV}.dockerfile
+    # links are deprecated (networks are used instead for communication and
+    # depends_on for upstream node name in nginx config)
+    # links:
+    #   - node1:node1
+    #   - node2:node2
+    #   - node3:node3
+    depends_on:
+      - node
+    ports:
+      - '80:80'
+      - '443:443'
+    networks:
+      - codewithdan-network
+
+  node:
+    container_name: node-codewithdan
+    image: ${DOCKER_ACCT}/node-codewithdan
+    build:
+      context: .
+      dockerfile: .docker/node-codewithdan.${APP_ENV}.dockerfile
+    ports:
+      - '8080'
+    volumes:
+      - .:/var/www/codewithdan
+    working_dir: /var/www/codewithdan
+    env_file:
+      - ./.docker/env/app.${APP_ENV}.env
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - codewithdan-network
+
+  mongo:
+    container_name: mongo
+    image: ${DOCKER_ACCT}/mongo
+    build:
+      context: .
+      dockerfile: .docker/mongo.dockerfile
+    ports:
+      - '27017:27017'
+    env_file:
+      - ./.docker/env/mongo.${APP_ENV}.env
+    networks:
+      - codewithdan-network
+
+  redis:
+    container_name: redis
+    image: ${DOCKER_ACCT}/redis
+    build:
+      context: .
+      dockerfile: .docker/redis.${APP_ENV}.dockerfile
+    ports:
+      - '6379'
+    networks:
+      - codewithdan-network
+
+  # cadvisor:
+  #   container_name: cadvisor
+  #   image: google/cadvisor
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:rw
+  #     - /sys:/sys:ro
+  #     - /var/lib/docker/:/var/lib/docker:ro
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - codewithdan-network
+
+networks:
+  codewithdan-network:
+    driver: bridge
+```
+
+### 6.5. Review
+
+- Docker Compose simplifies the process of building, starting and stopping services.
+- `docker-compose.yml` defines services
+- Excellent way to manage services used in a development environment
+- Key docker compose commands include: build, up and down
