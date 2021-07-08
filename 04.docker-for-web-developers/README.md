@@ -202,3 +202,21 @@ Intermediated container will be cache.
 Run with `docker run -d -p 8000:3000 <image_name>`
 
 ### 4.3. Creating a custom ASP.NET Core Dockerfile
+
+Build Docker image for development
+
+```Dockerfile
+  FROM        mcr.microsoft.com/dotnet/core/sdk
+
+  LABEL       author="Trong Hieu"
+
+  ENV         ASPNETCORE_URLS=http://*:5000
+  ENV         DOTNET_USE_POLLING_FILE_WATCHER=1
+  ENV         ASPNETCORE_ENVIRONMENT=development
+
+  WORKDIR     /app
+
+  ENTRYPOINT  [ "/bin/bash", "-c", "dotnet restore && dotnet watch run" ]
+```
+
+Build Docker image for production (Multi-state Dockerfile)
