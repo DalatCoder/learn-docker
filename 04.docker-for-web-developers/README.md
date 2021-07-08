@@ -302,3 +302,5 @@ Seed data to MongoDB
 Or
 
 - Running: `docker exec legacynodelinking node dbseeder.js`
+
+### 5.4. Linking ASP.NET Core and PostgreSQL Containers
