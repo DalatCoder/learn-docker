@@ -362,3 +362,81 @@ Steps to Create a Container Network
 - List: `docker network ls`
 - Inspect: `docker network inspect <network_name>`
 - Help: `docker network --help`
+
+## 6. Managing Containers with Docker Composer
+
+Module Agenda
+
+- Getting Started with Docker Compose
+- The `docker-compose.yml` File
+- Docker Compose Command
+- Docker Compose in action
+- Setting up development environment services
+- Create a custom `docker-compose.yml`
+- Managing development environment services
+
+### 6.1. Getting Started with Docker Compose (Good for development environment)
+
+> Docker Compose manages your application lifecycle
+
+Docker compose features
+
+- Manages the whole application lifecycle
+  - Start, stop and rebuild services (running containers)
+  - View the status of running services
+  - Stream the log output of running services
+  - Run a one-off command on a service
+
+![The need for Docker Compose](theneedfordocker.png)
+
+### 6.2. The role of the Docker Compose file
+
+![The role of docker compose file](theroleofdockercompose.png)
+
+Key Service configuration options
+
+- `build`: build context
+- `environment`: `development` - `production`
+- `image`: use existing image as a service
+- `networks`
+- `ports`
+- `volumes`: hooks up a volume which contains source code into a container at run-time
+
+Example
+
+```yml
+version: '3.x'
+services:
+  node:
+    build:
+      context: .
+      dockerfile: node.dockerfile
+    networks:
+      - nodeapp-network
+
+  mongodb:
+    image: mongo
+    networks:
+      - nodeapp-network
+
+networks:
+  nodeapp-network:
+    driver: bridge
+```
+
+### 6.3. Key Docker Compose Commands
+
+- `docker-compose build`: Build or rebuild services defined in `docker-compose.yml`
+  - `docker-compose build mongo`: Only build/rebuild mongo service
+- `docker-compose up`: Create and start the containers (include linking those connected containers)
+  - `docker-compose up --no-deps node`
+    - `--no-deps`: Do not recreate services that `node` depends on (when node connect to other container using `network`)
+    - `node`: Rebuild node image and stop, destroy and recreate _only_ `node`
+- `docker-compose down`: Take all of the containers down (stop and remove)
+  - `docker-compose stop`: Only stop running containers
+  - `docker-compose down --rmi all --volumes`: Remove all images and Remove all volumes
+- `docker-compose logs`
+- `docker-compose ps`
+- `docker-compose stop`
+- `docker-compose start`
+- `docker-compose rm`
