@@ -220,3 +220,40 @@ Build Docker image for development
 ```
 
 Build Docker image for production (Multi-state Dockerfile)
+
+## 5. Communicating between Docker containers
+
+Module Agenda
+
+- Getting started with Container linking
+- Linking Containers by Name (legacy linking)
+- Container Linking in Action
+- Getting Started with Container Networks
+- Container Networks in Action
+- Linking Multiple Containers
+
+### 5.1. Getting Started with Container Linking
+
+Options
+
+- Legacy Linking (Using Container Name)
+- Add Containers to a Bridge Network
+
+### 5.2. (Legacy) Linking using Container name
+
+Steps to Link Containers
+
+1. Run a Container with a name
+2. Link to Running Container by Name
+3. Repeat for Additional Container
+
+`docker run -d --name my-postgres postgres`
+
+Link to running container by name
+
+`docker run -d -p 8000:5000 --link my-postgres:postgres dalatcoder/aspnetcore`
+
+- `--link`: Link to named container
+- `my-postgres:postgres`:
+  - `my-postgres`: Name of linked container
+  - `postgres`: Linked container alias (Using inside `dalatcoder/aspnetcore` for `database connection string`)
