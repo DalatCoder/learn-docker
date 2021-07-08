@@ -440,3 +440,62 @@ networks:
 - `docker-compose stop`
 - `docker-compose start`
 - `docker-compose rm`
+
+### 6.4. Docker Compose in action
+
+Open `LinkingNodeToMongoDB` project and go to `docker-compose.yml`
+
+Docker-Compose file for NodeJS and MongoDB
+
+```yml
+version: '2'
+
+services:
+  node:
+    build:
+      context: .
+      dockerfile: legacylinking.dockerfile
+    ports:
+      - '8000:3000'
+    networks:
+      - nodeapp-network
+
+  mongodb:
+    image: mongo
+    networks:
+      - nodeapp-network
+
+networks:
+  nodeapp-network:
+    driver: bridge
+```
+
+- `docker-compose build`
+- `docker-compose up -d`
+
+Docker Compose for ASP.NET Core and PostgreSQL
+
+```yml
+version: '2'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: aspnetcore.dockerfile
+    ports:
+      - '8000:5000'
+    networks:
+      - aspnetcoreapp-network
+
+  postgres:
+    images: postgres
+    environment:
+      POSTGRES_PASSWORD: password
+    networks:
+      - aspnetcoreapp-network
+
+networks:
+  aspnetcoreapp-network:
+    driver: bridge
+```
