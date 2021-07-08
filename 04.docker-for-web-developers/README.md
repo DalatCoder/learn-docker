@@ -131,3 +131,14 @@ Các bước thực hiện
     - `node`: Name of the container
     - `npm start`" Command to start nodejs server
 - Mở trình duyệt web, truy cập vào địa chỉ: `localhost:8000`
+
+### 3.5. Hooking a Volume to ASP.NET Core Source Code
+
+- `dotnet new mvc DemoApp`
+- `docker pull mcr.microsoft.com/dotnet/core/sdk`
+- `cd DemoApp`
+- `docker run -it -p 8080:5000 -v %cd%:/app -w "/app" mcr.microsoft.com/dotnet/core/sdk /bin/bash`
+- `dotnet build`
+- `dotnet run`
+- `dotnet watch run`
+- `Ctrl P Q` to detach `tty`
