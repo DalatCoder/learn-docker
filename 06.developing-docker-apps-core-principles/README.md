@@ -115,3 +115,25 @@ Outcomes
 - Changes made to source code located on the host are reflected in the container via the bind mount volume
 - The hot reload utility automatically detects any changes to the source files and restarts the server
 - The changes can be tested to check they have implemented the desired behavior
+
+### 1.3. Different User and Group IDs
+
+Mismatch between owner
+
+- On Docker host machine: a user with specific UID and GID
+- On container: default by root user with UID=0 and GID=0
+
+![Different User](assets/differentuserandhost.png)
+
+![Mismatch permission](assets/mismatchpermission.png)
+
+Fix this by creating the same user with the same UID and GID inside container (???)
+
+![Fix by creating the same user](assets/creatingthesameuserinsidecontainer.png)
+
+How could we improve flexibility?
+
+- Cater for different users and IDs
+- Avoid rewriting of the Dockerfile
+
+![Using build args](assets/usingbuildargs.png)
