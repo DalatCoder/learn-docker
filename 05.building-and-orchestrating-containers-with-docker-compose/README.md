@@ -168,3 +168,44 @@ that `nodeapp` depends on.
 - `docker compose stop`
 - `docker compose start`
 - `docker compose rm`
+
+## 4. Additional Docker Compose Features
+
+### 4.1. View Container Logs
+
+- `docker compose logs`
+- `docker compose logs [services...]`
+- `docker compose logs --tail=5`: get me last 5 line
+- `docker compose logs --follow`: follow logs
+
+### 4.2. Shell into a Container
+
+`docker exec -it <container_id> sh`
+
+Shell Scenarios
+
+- View log files stored in the container
+- Run a DB seeder script
+- View code or files in a container
+
+`docker compose exec <service_name> <shell>`
+
+### 4.3. Scale Containers
+
+1 container created by service by default
+
+Scale the number of containers created for a service, `api` is the service for scaling.
+`docker compose up -d --scale api=4`
+
+- Do not define a host port if you are going to scale a service
+- Do not define container name
+
+```yml
+deploy:
+  replicas: 2
+  restart_policy:
+    condition: on-failure
+    delay: 5s
+    max_attemps: 3
+    window: 120s
+```
