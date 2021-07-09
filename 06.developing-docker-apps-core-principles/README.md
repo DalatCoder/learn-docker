@@ -36,15 +36,15 @@ EXPOSE 3000
 CMD ["node", "src/index.js"]
 ```
 
-![Build Process](buildprocess.png)
+![Build Process](assets/buildprocess.png)
 
 An image is a template for containers
 
 ### 1.1. The inner loop of code development
 
-![The inner loop](theinnerloop.png)
+![The inner loop](assets/theinnerloop.png)
 
-![The inner loop with container](theinnerloopwithcontainer.png)
+![The inner loop with container](assets/theinnerloopwithcontainer.png)
 
 Container Image Builds
 
@@ -53,14 +53,14 @@ Container Image Builds
 
 So, we decide to develop inside the containers
 
-![Develop inside the container](developinsidecontainer.png)
+![Develop inside the container](assets/developinsidecontainer.png)
 
 We need a method for persisting changes between container invocations. This will
 allow us to develop inside a container without losing our changes.
 
 ### 1.2. Docker Volumes
 
-![Docker Volumes Overview](dockervolumesoverview.png)
+![Docker Volumes Overview](assets/dockervolumesoverview.png)
 
 Volume Types
 
