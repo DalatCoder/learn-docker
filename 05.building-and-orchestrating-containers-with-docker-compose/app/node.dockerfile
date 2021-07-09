@@ -13,7 +13,7 @@
 
 # Option 2 (Legacy Linking - this is the OLD way)
 # Start MongoDB and Node (link Node to MongoDB container with legacy linking)
- 
+
 # docker run -d --name my-mongodb mongo
 # docker run -d -p 3000:3000 --link my-mongodb:mongodb --name nodeapp danwahlin/nodeapp
 
@@ -32,5 +32,7 @@ RUN         npm install
 
 COPY        . ./
 EXPOSE      $PORT
+
+RUN         echo "Install package: $PACKAGES" 
 
 ENTRYPOINT  ["npm", "start"]
