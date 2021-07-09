@@ -619,3 +619,76 @@ networks:
 - `docker-compose.yml` defines services
 - Excellent way to manage services used in a development environment
 - Key docker compose commands include: build, up and down
+
+## 7. Moving to Kubernetes
+
+Module Agenda
+
+- Beyond Docker Compose
+- Introduction to Kubernetes
+- Converting from Docker Compose to Kubernetes
+- Running Containers in Kubernetes
+- Stopping and Removing Containers in Kubernetes
+
+![Docker Compose Issue](dockercomposeissue.png)
+
+It would be nice if you could...
+
+- Package up an app, provide a manifest, and let something else manage it for us
+- Not worry about the management of containers
+- Eliminate single points of failure and self-heal containers
+- Have a robust way to scale and load balance containers
+- Update containers without bringing down the application
+- Have robust networking and persistent storage options
+
+What if we could define the containers we want and then hand it off to a
+system that manages it all for us?
+
+Welcome to Kubernetes!
+
+### 7.1. Introduction to Kubernetes
+
+> Kubernetes is an open-source system for automating deployment, scaling,
+> and management of containerized applications
+> Kubernetes is the coach of a container team (in football)
+
+Kubernetes offers a lot more than Docker Compose
+
+Kubernetes overview
+
+- Container and cluster management
+- Supported by all major cloud platforms
+- Provides a declarative way to define a cluster's state using manifest file (YAML)
+- Interact with Kubernetes using kubectl
+
+Key Features (different from Docker Compose)
+
+- Service Discovery/ Load balancing
+- Storage Orchestration
+- Automate Rollouts/ Rollbacks
+- Manage workloads
+- Self-healing
+- Secret and Configuration Management
+- Horizontal Scaling
+- More ...
+
+![Kubernetes - The Big Picture](kubernetsbigpicture.png)
+
+### 7.2. Running Kubernetes Locally
+
+- Minikube
+- Docker Desktop
+
+### 7.3. Key Kubernetes Concepts
+
+Deployment
+
+- Describe desired state
+- Can be used to replicate pods
+- Support rolling updaets and rollbacks
+
+Service
+
+- Pods live and die
+- Services abstract pod IP addresses from consumers
+- Load balances between pods
