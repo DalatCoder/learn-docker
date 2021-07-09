@@ -73,3 +73,98 @@ Run:
 
 - `docker-compose build`
 - `docker compose build`
+
+## 3. Orchestrating Containers with Docker Compose
+
+### 3.1. Docker compose properties
+
+- `ports`
+- `volumes`
+- `environment`
+- `networks`
+
+### 3.2. Define ports and volumes
+
+```yml
+ports:
+  - '8000:3000'
+```
+
+Volume Usage Scenarios
+
+- Store log files outside of container
+- Store database files outside of container
+- Link source code to container (hook source code into container)
+
+### 3.3. Define environment variables
+
+```yml
+environment:
+  - NODE_ENV=production
+  - APP_VERSION=1.0
+```
+
+or using file
+
+```yml
+env_file:
+  - ./common.env
+  - settings.env
+```
+
+### 3.4. Create a bridge network
+
+![Bridge Network](bridgenetwork.png)
+
+`docker network create --driver bridge isolated_network`
+
+```yml
+services:
+  web:
+    networks:
+      - isolated_network:
+
+networks:
+  isolated_network:
+    driver: bridge
+```
+
+### 3.5. Start and Stop Containers
+
+- `docker compose p -d`: detached mode
+
+```yml
+services:
+  node:
+    image: nodeapp
+
+    build:
+      context: .
+      dockerfile: node.dockerfile
+
+    ports:
+      - '3000:3000'
+
+    volumes:
+      - ./logs:/var/www/logs
+
+    depends_on:
+      - mongodb
+```
+
+Node service will be started after any other services it depends on. In above figrue,
+`node` service depends on another service named `mongodb` so start the
+other service first.
+
+Note: `mongodb` service start first and `node` service start right after it. So,
+we still have some try/catch to connect to database
+
+`docker compose up -d --no-deps nodeapp`
+
+Stop, destroy and recreate only `nodeapp` service. Do not recreate services
+that `nodeapp` depends on.
+
+- `docker compose ps`
+- `docker compose stop`
+- `docker compose start`
+- `docker compose rm`
