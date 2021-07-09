@@ -137,3 +137,17 @@ How could we improve flexibility?
 - Avoid rewriting of the Dockerfile
 
 ![Using build args](assets/usingbuildargs.png)
+
+### 1.4. Demo
+
+Developing an application using a bind mount
+
+- Create a Docker image for the app
+- Bind mount the source code into a container
+- Make a source code change
+- Watch and test the hot reload feature
+
+Running Container: `docker run --rm -it -p 8000:3000 todo:1.0`
+
+Running container for developing purpose:
+`docker run --rm -it -p 8000:3000 -v $(pwd)/spec:/app/spec -v $(pwd)/src:/app/src todo:1.0 dev`
